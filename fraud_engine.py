@@ -18,7 +18,7 @@ import math
 from datetime import datetime
 from pathlib import Path
 
-import joblib
+
 import numpy as np
 import pandas as pd
 
@@ -33,8 +33,8 @@ def _load_model():
     """Load the trained Random Forest from disk (cached)."""
     global _model
     if _model is None and MODEL_PATH.exists():
-        _model = joblib.load(MODEL_PATH)
-    return _model
+       
+     return _model
 
 
 # ---------------------------------------------------------------------------
