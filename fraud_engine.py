@@ -20,7 +20,7 @@ from pathlib import Path
 
 
 
-import pandas as pd
+
 
 _FEATURES = ["amount", "hour", "day_of_week", "week_of_month",
              "amount_deviation", "freq_deviation"]
@@ -109,7 +109,7 @@ def ml_predict(amount: float, profile: dict, now: datetime) -> float:
         return 0.0
 
     avg = profile["avg_amount"] or 1.0
-    row = pd.DataFrame([[
+    row = [amount, avg_amount, avg_txns]([[
         amount,
         now.hour,
         now.weekday(),
