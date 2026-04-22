@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Create account{% endblock %}
+{% block content %}
+<div class="auth-card">
+  <div class="g-logo">
+    <span style="color:#4285F4">U</span><span style="color:#EA4335">P</span><span style="color:#FBBC05">I</span><span style="color:#34A853">G</span><span style="color:#4285F4">u</span><span style="color:#EA4335">a</span><span style="color:#FBBC05">r</span><span style="color:#34A853">d</span>
+  </div>
+  <h1>Create your account</h1>
+  <form method="post">
+    <input type="text"     name="full_name" placeholder="Full name" required />
+    <input type="email"    name="email"     placeholder="Email"     required />
+    <input type="password" name="password"  placeholder="Password (min 6)" minlength="6" required />
+    <button class="btn-primary" type="submit">Sign up</button>
+  </form>
+  <p class="muted">Already have one? <a href="{{ url_for('login') }}">Sign in</a></p>
+</div>
+{% endblock %}

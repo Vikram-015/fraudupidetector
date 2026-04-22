@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}Behavior Profile{% endblock %}
+{% block content %}
+<div class="card">
+  <h1>Your Behavior Profile</h1>
+  <p class="muted">Used as the baseline to detect anomalies.</p>
+  <form method="post" class="grid">
+
+  <label>Account type
+    <select name="account_type">
+      <option value="Savings" {% if user['account_type']=='Savings' %}selected{% endif %}>Savings</option>
+      <option value="Current" {% if user['account_type']=='Current' %}selected{% endif %}>Current</option>
+    </select>
+  </label>
+
+  <label>Average daily transaction amount (₹)
+    <input type="number" step="1" name="avg_amount" value="{{ user['avg_amount'] }}" required />
+  </label>
+
+  <label>Average number of daily transactions
+    <input type="number" step="1" name="avg_daily_txns" value="{{ user['avg_daily_txns'] }}" required />
+  </label>
+
+  <hr>
+
+  <!-- ✅ EMI SECTION -->
+  <h3>💳 EMI Settings</h3>
+
+  <label>Monthly EMI Amount (₹)
+    <input type="number" name="emi_amount" placeholder="Enter EMI amount">
+  </label>
+
+  <label>EMI Type
+    <select name="emi_type">
+      <option>Loan</option>
+      <option>Credit Card</option>
+      <option>Other</option>
+    </select>
+  </label>
+
+  <hr>
+
+  <!-- ✅ SPECIAL TRANSACTION SECTION -->
+  <h3>⭐ Special Transaction Settings</h3>
+
+  <label>Max Special Transaction (₹)
+    <input type="number" name="special_limit" placeholder="Enter max limit">
+  </label>
+
+  <label>Allowed Time Range
+    <input type="text" name="special_time" placeholder="9AM - 9PM">
+  </label>
+
+  <button class="btn-primary" type="submit">Save profile</button>
+  <hr>
+
+<h3>💳 EMI Settings</h3>
+<a href="{{ url_for('emi') }}" class="btn-primary">Manage EMIs</a>
+
+<hr>
+
+<h3>⭐ Special Transactions</h3>
+<a href="{{ url_for('special') }}" class="btn-primary">Manage Special Transactions</a>
+
+</form>
+</div>
+{% endblock %}

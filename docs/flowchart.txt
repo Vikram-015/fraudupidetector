@@ -1,0 +1,56 @@
+FRAUD DETECTION FLOWCHART
+=========================
+
+           ┌────────────────────┐
+           │ User clicks "Send" │
+           │  amount, receiver  │
+           └─────────┬──────────┘
+                     ▼
+        ┌────────────────────────┐
+        │ Match any EMI?         │
+        │ (amount ±5%, week)     │
+        └───────┬──────┬─────────┘
+            yes │      │ no
+                ▼      │
+   ┌────────────────┐  │
+   │ Show EMI note  │  │
+   │ (verify / odd) │  │
+   └────────┬───────┘  │
+            │          ▼
+            │  ┌───────────────────────┐
+            │  │ Match special txn?    │
+            │  │ (amount ±10%)         │
+            │  └────┬───────┬──────────┘
+            │   yes │       │ no
+            │       ▼       │
+            │ ┌───────────┐ │
+            │ │ Allow as  │ │
+            │ │ recurring │ │
+            │ └─────┬─────┘ │
+            │       │       ▼
+            │       │  ┌───────────────────────────┐
+            │       │  │ deviation = (amt-avg)/avg │
+            │       │  │ ml_p = RF.predict_proba   │
+            │       │  │ hybrid = .6*dev + .4*ml*10│
+            │       │  └────────────┬──────────────┘
+            │       │               ▼
+            │       │     ┌────────────────────┐
+            │       │     │  Classify hybrid   │
+            │       │     ├────────────────────┤
+            │       │     │ ≤1   → Normal/allow│
+            │       │     │ ≤3   → Susp /warn  │
+            │       │     │ ≤6   → High /OTP   │
+            │       │     │ >6   → Fraud/block │
+            │       │     └────────┬───────────┘
+            │       │              │
+            ▼       ▼              ▼
+        ┌──────────────────────────────────┐
+        │    Persist txn + show toast      │
+        │  Allow | Warn | OTP page | Block │
+        └─────────────────┬────────────────┘
+                          ▼
+              ┌────────────────────────┐
+              │ User: "This was me" /  │
+              │       "Report fraud"   │
+              │ → adaptive learning    │
+              └────────────────────────┘

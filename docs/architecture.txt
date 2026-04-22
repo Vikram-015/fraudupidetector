@@ -1,0 +1,45 @@
+SYSTEM ARCHITECTURE — Hybrid UPI Fraud Detection
+================================================
+
+          ┌────────────────────────────────────────┐
+          │              BROWSER (UI)              │
+          │  Login · Signup · Profile · Send Money │
+          │  EMIs · Special Txns · Dashboard · OTP │
+          └──────────────────┬─────────────────────┘
+                             │  HTTP (Flask routes)
+                             ▼
+   ┌──────────────────────────────────────────────────────┐
+   │                 FLASK BACKEND (app.py)               │
+   │                                                      │
+   │  Auth (Werkzeug pw hash) ──► session                 │
+   │                                                      │
+   │  /send  ──► HYBRID DECISION ENGINE (fraud_engine.py) │
+   │            │                                         │
+   │            ├── 1. EMI logic        (amount + week)   │
+   │            ├── 2. Special-txn logic (recurring)      │
+   │            ├── 3. Rule-based deviation               │
+   │            │      score = (amt - avg)/avg            │
+   │            └── 4. Random Forest ML  (model.pkl)      │
+   │                                                      │
+   │            ▼                                         │
+   │     Risk Class  →  Action                            │
+   │     Normal      →  allow                             │
+   │     Suspicious  →  warn                              │
+   │     High Risk   →  OTP verification (simulated)      │
+   │     Fraud       →  block                             │
+   └─────────────┬───────────────────────────┬────────────┘
+                 │                           │
+                 ▼                           ▼
+        ┌────────────────┐         ┌──────────────────────┐
+        │ SQLite (upi.db)│         │ ML model (model.pkl) │
+        │  users         │         │ Random Forest        │
+        │  emis          │         │ trained by           │
+        │  special_txns  │         │ train_model.py on    │
+        │  transactions  │         │ sample_transactions  │
+        └────────────────┘         └──────────────────────┘
+                 ▲
+                 │   adaptive learning:
+                 │   profile updated when user
+                 │   confirms a transaction
+                 │
+        (avg_amount drifts toward real spending behavior)

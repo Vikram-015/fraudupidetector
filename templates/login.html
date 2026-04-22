@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Sign in · UPIGuard{% endblock %}
+{% block content %}
+<div class="auth-card">
+  <div class="g-logo">
+    <span style="color:#4285F4">U</span><span style="color:#EA4335">P</span><span style="color:#FBBC05">I</span><span style="color:#34A853">G</span><span style="color:#4285F4">u</span><span style="color:#EA4335">a</span><span style="color:#FBBC05">r</span><span style="color:#34A853">d</span>
+  </div>
+  <h1>Sign in</h1>
+  <p class="sub">Use your UPIGuard account</p>
+
+  <form method="post">
+    <input type="email" name="email" placeholder="Email" required />
+    <input type="password" name="password" placeholder="Password" required />
+    <button class="btn-primary" type="submit">Next</button>
+  </form>
+
+  <p class="muted">No account? <a href="{{ url_for('signup') }}">Create one</a></p>
+</div>
+{% endblock %}

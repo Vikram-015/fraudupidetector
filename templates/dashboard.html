@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="hero">
+  <div>
+    <h1>Hello, {{ user['full_name'] or user['email'] }}</h1>
+    <p class="muted">Account: <strong>{{ user['account_type'] }}</strong> ·
+       Avg ₹{{ '%.0f'|format(user['avg_amount']) }} ·
+       {{ user['avg_daily_txns'] }} txns/day</p>
+  </div>
+  <div class="actions">
+    <a class="btn-primary" href="{{ url_for('send') }}">Send Money</a>
+    <a class="btn-ghost" href="{{ url_for('random_txn') }}">+ Random Txn</a>
+  </div>
+</div>
+
+<div class="cards-row">
+  <div class="stat stat-ok">
+    <span>Normal</span>
+    <strong>₹{{ '%.0f'|format(pattern['Normal']) }}</strong>
+  </div>
+  <div class="stat stat-warn">
+    <span>Suspicious</span>
+    <strong>₹{{ '%.0f'|format(pattern['Suspicious']) }}</strong>
+  </div>
+  <div class="stat stat-otp">
+    <span>High Risk</span>
+    <strong>₹{{ '%.0f'|format(pattern['High Risk']) }}</strong>
+  </div>
+  <div class="stat stat-bad">
+    <span>Fraud</span>
+    <strong>₹{{ '%.0f'|format(pattern['Fraud']) }}</strong>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Transaction history</h2>
+  <table class="data">
+    <thead>
+      <tr><th>Time</th><th>Receiver</th><th>Amount</th><th>Risk</th><th>Action</th><th>Note</th><th></th></tr>
+    </thead>
+    <tbody>
+    {% for t in txns %}
+      <tr class="row-{{ t['risk_class']|replace(' ','') }}">
+        <td>{{ t['ts'] }}</td>
+        <td>{{ t['receiver'] }}</td>
+        <td>₹{{ '%.0f'|format(t['amount']) }}</td>
+        <td><span class="badge b-{{ t['risk_class']|replace(' ','') }}">{{ t['risk_class'] }}</span></td>
+        <td>{{ t['action'] }}</td>
+        <td class="muted">{{ t['note'] }}</td>
+        <td>
+          <button onclick="toggleHistory()" class="btn-primary">
+  View Full History
+</button>
+<div id="fullHistory" style="display:none; margin-top:20px;">
+  <h3>All Transactions</h3>
+
+  {% for t in all_txns %}
+    <div class="txn-card">
+      ₹{{ t.amount }} → {{ t.receiver }} | {{ t.risk_class }}
+    </div>
+  {% endfor %}
+</div>
+          {% if not t['confirmed'] and not t['reported'] %}
+            <a class="link-ok"  href="{{ url_for('confirm', txn_id=t['id']) }}">This was me</a> ·
+            <a class="link-bad" href="{{ url_for('report',  txn_id=t['id']) }}">Report fraud</a>
+          {% elif t['confirmed'] %}
+            ✅ Confirmed
+          {% else %}
+            🚩 Reported
+          {% endif %}
+        </td>
+      </tr>
+    {% else %}
+      <tr><td colspan="7" class="muted">No transactions yet — try Send Money.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

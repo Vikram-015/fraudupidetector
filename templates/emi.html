@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}EMIs{% endblock %}
+{% block content %}
+<div class="card">
+  <h1>Your EMIs</h1>
+  <form method="post" class="grid-3">
+    <input type="text"   name="name"   placeholder="EMI name (e.g. Bike loan)" required />
+    <input type="number" name="amount" placeholder="Amount ₹" step="1" required />
+    <select name="week" required>
+      <option value="">Expected week of month</option>
+      <option value="1">1st week</option>
+      <option value="2">2nd week</option>
+      <option value="3">3rd week</option>
+      <option value="4">4th week</option>
+      <option value="5">5th week</option>
+    </select>
+    <button class="btn-primary" type="submit">Add EMI</button>
+  </form>
+
+  <table class="data">
+    <thead><tr><th>Name</th><th>Amount</th><th>Week</th></tr></thead>
+    <tbody>
+    {% for e in emis %}
+      <tr><td>{{ e['name'] }}</td><td>₹{{ '%.0f'|format(e['amount']) }}</td><td>Week {{ e['week'] }}</td></tr>
+    {% else %}
+      <tr><td colspan="3" class="muted">No EMIs added yet.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

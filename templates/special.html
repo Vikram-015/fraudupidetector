@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Special Transactions{% endblock %}
+{% block content %}
+<div class="card">
+  <h1>Special / Recurring Transactions</h1>
+  <p class="muted">e.g. school fees, insurance — these will not be flagged as anomalies.</p>
+  <form method="post" class="grid-3">
+    <input type="text"   name="name"   placeholder="Name (e.g. Insurance)" required />
+    <input type="number" name="amount" placeholder="Amount ₹" step="1" required />
+    <select name="frequency_months" required>
+      <option value="">Frequency</option>
+      <option value="1">Monthly</option>
+      <option value="2">Every 2 months</option>
+      <option value="3">Every 3 months (quarterly)</option>
+      <option value="4">Every 4 months</option>
+    </select>
+    <button class="btn-primary" type="submit">Add</button>
+  </form>
+
+  <table class="data">
+    <thead><tr><th>Name</th><th>Amount</th><th>Frequency</th></tr></thead>
+    <tbody>
+    {% for s in specials %}
+      <tr><td>{{ s['name'] }}</td><td>₹{{ '%.0f'|format(s['amount']) }}</td><td>Every {{ s['frequency_months'] }} month(s)</td></tr>
+    {% else %}
+      <tr><td colspan="3" class="muted">None added yet.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

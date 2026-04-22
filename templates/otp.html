@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}OTP Verification{% endblock %}
+{% block content %}
+<div class="card narrow">
+  <h1>🔐 OTP Verification</h1>
+  <p>This is a <strong>High-Risk transaction</strong> of <strong>₹{{ '%.0f'|format(txn['amount']) }}</strong> to <strong>{{ txn['receiver'] }}</strong>.</p>
+  <p class="muted">Demo OTP: <code>{{ demo_otp }}</code></p>
+  <form method="post" class="grid">
+    <input type="text" name="otp" placeholder="Enter 4-digit OTP" maxlength="4" required />
+    <button class="btn-primary" type="submit">Verify</button>
+  </form>
+</div>
+{% endblock %}

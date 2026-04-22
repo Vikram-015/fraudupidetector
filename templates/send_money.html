@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Send Money{% endblock %}
+{% block content %}
+<div class="card narrow">
+  <h1>💸 Send Money</h1>
+  <form method="post" class="grid">
+    <label>Receiver UPI ID
+      <input type="text" name="receiver" placeholder="someone@upi" required />
+    </label>
+    <label>Amount (₹)
+      <input type="number" name="amount" step="1" min="1" required />
+    </label>
+    <button class="btn-primary" type="submit">Send</button>
+  </form>
+  <p class="muted">Or try a <a href="{{ url_for('random_txn') }}">random simulated transaction</a>.</p>
+</div>
+{% endblock %}
